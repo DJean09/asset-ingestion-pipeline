@@ -21,7 +21,12 @@ app.add_middleware(
 )
 
 def process_image(file_bytes, bg_color=(243, 241, 237, 255)):
-    """Resizes the image to a square and returns the WebP bytes."""
+    """
+    Resizes the image to a square and returns the WebP bytes.
+    Args:
+        file_bytes (bytes): The raw bytes of the uploaded image.
+        bg_color (tuple): RGBA color for the background. Default is a light beige.
+    """
     with Image.open(io.BytesIO(file_bytes)) as img:
         img = img.convert("RGBA")
         max_dim = max(img.width, img.height)
@@ -39,13 +44,19 @@ def process_image(file_bytes, bg_color=(243, 241, 237, 255)):
 
 @app.post("/upload-assets/")
 async def upload_assets(sku: str = Form(...), files: List[UploadFile] = File(...)):
-    
+    """
+    API endpoint to handle image uploads, process them, and save the results.
+    Args:
+        sku (str): The SKU associated with the images, provided as a form field.
+        files (List[UploadFile]): A list of uploaded image files.
+    """
     # Define the output folder for processed images
     # ~ automatically finds your home directory and adds \Downloads to the end
     output_folder = os.path.join(os.path.expanduser("~"), "Downloads")
 
     processed_count = 0
     
+    # Loop through each uploaded file and convert it to WebP format
     for index, file in enumerate(files, start=1):
         if not file.content_type.startswith("image/"):
             raise HTTPException(status_code=400, detail=f"{file.filename} is not an image.")
@@ -65,7 +76,8 @@ async def upload_assets(sku: str = Form(...), files: List[UploadFile] = File(...
             out_file.write(final_webp_bytes)
             
         processed_count += 1
-        
+    
+    # Return a success message with the count of processed images
     return {
         "status": "Success",
         "message": f"Successfully processed {processed_count} images for SKU {sku}."
