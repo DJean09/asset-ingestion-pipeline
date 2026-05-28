@@ -42,6 +42,8 @@ function updateFileListUI() {
     if (queuedFiles.length === 0) {
         fileList.innerHTML = "<li>No files selected yet.</li>";
         return;
+    } else {
+        fileList.innerHTML = "<p>Total files: " + queuedFiles.length + "</p>";
     }
     
     // Add each queued file to the list in the UI
@@ -93,4 +95,9 @@ async function sendFilesToPython() {
         console.error("Error sending to backend:", error);
         alert("Connection failed. Is your Python FastAPI server running?");
     }
+}
+
+function clearQueue() {
+    queuedFiles = [];
+    updateFileListUI();
 }
