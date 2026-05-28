@@ -27,13 +27,23 @@ body {
 }
 button {
     padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
 }
-button:hover {
+#startButton {
+    background-color: #28a745;
+    color: white;
+}
+#startButton:hover {
     background-color: #218838;
+}
+#clearButton {
+    background-color: #adadad;
+    color: black;
+    margin-left: 10px;
+}
+#clearButton:hover {
+    background-color: #9c9c9c;
 }
